@@ -1,0 +1,10 @@
+# Artefatos de build C++
+/build/
+/bin/
+*.o
+
+# Artefatos LaTeX
+*.aux
+*.log
+*.toc
+*.synctex.gz
