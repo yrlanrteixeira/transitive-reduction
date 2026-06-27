@@ -12,9 +12,24 @@ A base versionada contém o build, as interfaces dos módulos e a implementaçã
 
 ## Compilação
 
+### CMake
+
+O projeto cmake pode ser compilado tanto pelo Visual Studio no Windows quanto pela linha de comando:
+
+```
+cmake -B bin
+cmake --build bin
+```
+
+### Make
+
+Uma alternativa ao cmake é utilizar o makefile:
+
 ```
 make
 ```
+
+### Executáveis
 
 Com todos os módulos implementados, gera os binários em `bin/`:
 
