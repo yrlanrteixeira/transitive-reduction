@@ -55,7 +55,7 @@
 \title[Redução Transitiva de Grafos Direcionados Baseada em Caminhamento em Profundidade]{Redução Transitiva de Grafos Direcionados Baseada em Caminhamento em Profundidade}
 
 %THE ORCID IS MANDATORY FOR EACH AUTHOR IN JBCS
-\author[Teixeira et al. 202X]{
+\author[Teixeira et al. 2026]{
 \affil{\textbf{Yrlan Rangel Teixeira}~\textcolor{blue}{\faEnvelopeO}~~[~\textbf{Pontifícia Universidade Católica de Minas Gerais}~|\href{mailto:yrlan.rangel@sga.pucminas.br}{~\textbf{\textit{yrlan.rangel@sga.pucminas.br}}}~]}
 
 \affil{\textbf{Hugo Alves Duarte}~~[~\textbf{Pontifícia Universidade Católica de Minas Gerais}~|\href{mailto:hduarte@sga.pucminas.br}{~\textbf{\textit{hduarte@sga.pucminas.br}}}~]}
@@ -105,7 +105,7 @@ Grafos
 \section{Introdução}
 \label{sec:intro}
 
-Seja $G=(V,E)$ um grafo direcionado. A \emph{atingibilidade} de um vértice $u \in V$ é o conjunto $R_G(u)=\{v \in V \mid \text{existe caminho de } u \text{ a } v \text{ em } G\}$. Em muitas aplicações (compactação de hierarquias de dependências, visualização de grafos, fechos de ordens parciais, redes de citações) interessa o \emph{menor} subgrafo que preserva exatamente essa relação de atingibilidade. Esse subgrafo é a \emph{redução transitiva} de $G$, definida por Aho, Garey e Ullman~\cite{aho1972}: um grafo $G'=(V,E')$, $E' \subseteq E$, tal que (i) $R_{G'}(u)=R_G(u)$ para todo $u \in V$ e (ii) nenhum subgrafo próprio de $G'$ satisfaz (i). Para DAGs a redução transitiva é única: uma aresta $(u,v)$ pertence a $G'$ se, e somente se, $v$ não é alcançável a partir de $u$ por nenhum caminho de comprimento maior ou igual a 2.
+Seja $G=(V,E)$ um grafo direcionado. A \emph{atingibilidade} de um vértice $u \in V$ é o conjunto $R_G(u)=\{v \in V \mid \text{existe caminho de } u \text{ a } v \text{ em } G\}$. Em muitas aplicações (compactação de hierarquias de dependências, visualização de grafos, fechos de ordens parciais, redes de citações) interessa o \emph{menor} subgrafo que preserva exatamente essa relação de atingibilidade. Esse subgrafo é a \emph{redução transitiva} de $G$, definida por \cite{aho1972}: um grafo $G'=(V,E')$, $E' \subseteq E$, tal que (i) $R_{G'}(u)=R_G(u)$ para todo $u \in V$ e (ii) nenhum subgrafo próprio de $G'$ satisfaz (i). Para DAGs a redução transitiva é única: uma aresta $(u,v)$ pertence a $G'$ se, e somente se, $v$ não é alcançável a partir de $u$ por nenhum caminho de comprimento maior ou igual a 2.
 
 Este trabalho implementa a redução transitiva por meio de \emph{caminhamento no grafo}: a decisão de manter ou remover cada aresta é tomada a partir de buscas em profundidade (DFS), sem construir o fecho transitivo completo nem usar multiplicação de matrizes. A Seção~\ref{sec:impl} detalha o algoritmo e a representação adotada; a Seção~\ref{sec:exp} apresenta a metodologia experimental e os resultados; a Seção~\ref{sec:nao-dir} disserta sobre o caso não direcionado; a Seção~\ref{sec:conclusao} conclui. As responsabilidades constam da Seção~\ref{sec:resp}.
 
@@ -117,7 +117,7 @@ O código foi organizado de forma modular, separando interfaces (\texttt{include
 \subsection{Representação do grafo}
 \label{sec:repr}
 
-O grafo é representado por \textbf{lista de adjacência}: um vetor \texttt{adj} de $|V|$ posições em que \texttt{adj[u]} é um \texttt{std::vector<int>} com os sucessores diretos de $u$. A escolha é justificada por três fatores. Primeiro, o algoritmo é inteiramente baseado em caminhamento: uma DFS sobre lista de adjacência custa $O(|V|+|E|)$, pois visita apenas as arestas que de fato existem, ao passo que sobre matriz de adjacência custaria $\Theta(|V|^2)$ por busca, mesmo em grafos esparsos; o custo total do algoritmo saltaria, assim, de $O(|V|(|V|+|E|))$ para $\Theta(|V|^3)$. Segundo, a memória é $O(|V|+|E|)$ contra $\Theta(|V|^2)$ da matriz, o que permite tratar grafos grandes e esparsos. Terceiro, a única operação que a matriz ofereceria em $O(1)$ (consultar se uma aresta específica existe) não é necessária: o algoritmo nunca pergunta ``existe $(u,v)$?'', apenas enumera sucessores. O uso de \texttt{std::vector} contíguo ainda favorece a localidade de \emph{cache} durante as travessias.
+O grafo é representado por \textbf{lista de adjacência}: um vetor \texttt{adj} de $|V|$ posições em que \texttt{adj[u]} é um \texttt{std::vector<int>} com os sucessores diretos de $u$. A escolha é justificada por três fatores. Primeiro, o algoritmo é inteiramente baseado em caminhamento: uma DFS sobre lista de adjacência custa $O(|V|+|E|)$ \citep{cormen2022}, pois visita apenas as arestas que de fato existem, ao passo que sobre matriz de adjacência custaria $\Theta(|V|^2)$ por busca, mesmo em grafos esparsos; o custo total do algoritmo saltaria, assim, de $O(|V|(|V|+|E|))$ para $\Theta(|V|^3)$. Segundo, a memória é $O(|V|+|E|)$ contra $\Theta(|V|^2)$ da matriz, o que permite tratar grafos grandes e esparsos. Terceiro, a única operação que a matriz ofereceria em $O(1)$ (consultar se uma aresta específica existe) não é necessária: o algoritmo nunca pergunta ``existe $(u,v)$?'', apenas enumera sucessores. O uso de \texttt{std::vector} contíguo ainda favorece a localidade de \emph{cache} durante as travessias.
 
 \subsection{Algoritmo de redução baseado em caminhamento}
 \label{sec:alg}
@@ -228,7 +228,7 @@ A implementação \textbf{não funcionaria} para grafos não direcionados, por u
 
 Do ponto de vista operacional, nossa implementação falharia em dois níveis. Primeiro, uma aresta não-direcionada $\{u,v\}$ corresponde ao par direcionado $(u,v)$ e $(v,u)$, formando um ciclo de comprimento 2: o teste de aciclicidade rejeitaria a entrada imediatamente. Segundo, ainda que o teste fosse suprimido, a Propriedade da Seção~\ref{sec:alg} deixa de valer: ao procurar caminhos de comprimento $\geq 2$ de $u$ a $v$, a DFS encontraria caminhos que usam a própria aresta $\{u,v\}$ no sentido inverso em outro ponto do percurso, concluindo erroneamente que a aresta é redundante. No triângulo $\{a,b\},\{b,c\},\{a,c\}$, por exemplo, \emph{toda} aresta possui caminho alternativo de comprimento 2, e o algoritmo removeria as três simultaneamente, desconectando o grafo, quando o correto (como árvore geradora) seria remover exatamente uma. A remoção precisa ser \emph{sequencial e reavaliada} no caso não direcionado (na linha do algoritmo de Kruskal/DFS para árvores geradoras), enquanto no DAG as decisões por aresta são independentes entre si, que é precisamente o que torna o caminhamento direto correto e eficiente.
 
-O caminho correto para grafos direcionados \emph{com ciclos}, por sua vez, seria condensar as componentes fortemente conexas (Tarjan/Kosaraju), reduzir o DAG de condensação e substituir cada componente por um ciclo hamiltoniano interno mínimo, conforme observado por Aho et al.~\cite{aho1972}.
+O caminho correto para grafos direcionados \emph{com ciclos}, por sua vez, seria condensar as componentes fortemente conexas (Tarjan/Kosaraju), reduzir o DAG de condensação e substituir cada componente por um ciclo hamiltoniano interno mínimo, conforme observado por \cite{aho1972}.
 
 \section{Conclusão}
 \label{sec:conclusao}
@@ -238,7 +238,7 @@ Implementamos em C++ a redução transitiva de DAGs por caminhamento em profundi
 \section{Responsabilidades}
 \label{sec:resp}
 
-O trabalho foi integralmente desenvolvido por \textbf{Yrlan Rangel Teixeira}: implementação de todos os módulos em C++ (representação do grafo, caminhamentos, algoritmo de redução transitiva, gerador de instâncias e verificador de corretude), execução e análise dos experimentos e redação deste relatório.
+As atividades necessárias para a realização deste trabalho foram distribuídas entre os membros do grupo de acordo com a responsabilidade atribuída a cada um. A implementação do lista de adjacência foi desenvolvida por \textbf{Vinicius Figueiredo Ferreira}, o algoritmo de busca em profundidade foi responsabilidade de \textbf{Hugo Alves Duarte}, o algoritmo de redução de transitividade foi implementado por \textbf{Yrlan Rangel Teixeira}, o gerador de instâncias por \textbf{Gabriel Reis Villela}, o verificador de corretude por \textbf{Daniel Valadares Souza}, a escrita do relatório e realização dos testes e benchmark foram realizados por \textbf{Pedro Henrique Debs Rabelo} e \textbf{Gilson Júnio Pacheco Silva}.
 
 \bibliographystyle{apalike-sol}
 \bibliography{refs}
